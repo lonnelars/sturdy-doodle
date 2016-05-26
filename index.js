@@ -42,6 +42,13 @@ d3.tsv("data.tsv", type, (error, data) => {
         .style("text-anchor", "end")
         .text("Frequency");
 
+    var popover, popoverText, popoverCircle;
+
+    var popoverScale = d3.scale.linear()
+        .domain([0, d3.max(data, (d) => d.frequency)])
+        .range([37, 150]);
+
+    const percent = d3.format(".3f");
     var bar = chart.selectAll(".bar")
         .data(data)
         .enter().append("rect")
@@ -49,7 +56,30 @@ d3.tsv("data.tsv", type, (error, data) => {
         .attr("x", (d) => x(d.letter))
         .attr("y", (d) => y(d.frequency))
         .attr("height", (d) => height - y(d.frequency))
-        .attr("width", x.rangeBand());
+        .attr("width", x.rangeBand())
+        .on("mouseover", (d) => {
+            popoverText.text(`${d.letter}: ${percent(d.frequency * 100)}%`);
+            popoverCircle.transition().attr("r", () => popoverScale(d.frequency))
+            popover.transition().style("opacity", "100");
+        })
+        .on("mouseout", () => {
+            popover.transition().style("opacity", "0");
+        });
+
+    popover = chart.append("g")
+        .attr("class", "popover")
+        .style("opacity", "0");
+    popoverCircle = popover.append("circle")
+        .attr("class", "popover__circle")
+        .attr("r", 50)
+        .attr("cx", width / 2)
+        .attr("cy", height / 2);
+    popoverText = popover.append("text")
+        .text("")
+        .attr("class", "popover__text")
+        .attr("x", width / 2)
+        .attr("y", height / 2)
+        .attr("dy", ".25em");
 });
 
 function type(d) {
