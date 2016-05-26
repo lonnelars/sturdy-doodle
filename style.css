@@ -1,0 +1,29 @@
+.bar {
+    fill: steelblue;
+}
+
+.axis text {
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.popover__circle {
+    fill: white;
+    stroke: rgba(0, 0, 0, .50);
+    stroke-width: 1;
+}
+
+.popover__text {
+    text-anchor: middle;
+}
+
